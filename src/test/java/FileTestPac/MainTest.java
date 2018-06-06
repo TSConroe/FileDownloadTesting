@@ -9,9 +9,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.File;
-import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.testng.Assert.assertTrue;
 
 public class MainTest {
@@ -24,18 +22,24 @@ public class MainTest {
     public void Before(){
         System.setProperty("webdriver.chrome.driver", "C://Chromedriver//chromedriver.exe");
         this.driver = new ChromeDriver();
+        if (file.exists())
+         file.delete();
 
     }
 
     @Test
-    public void TitleTest(){
+    public void TitleTest() {
         driver.navigate().to(url);
 
-        WebDriverWait wait10sec = new WebDriverWait(driver, 10);
+
         driver.findElement(By.xpath("//*[@id=\"mainContent\"]/table[1]/tbody/tr[1]/td[4]/a")).click();
-        //wait10sec.until();
-       // Thread.sleep(2000);
-       // TimeUnit.NANOSECONDS.sleep(41110);
+        while (!file.exists()) {
+            try {
+                Thread.sleep(1000 * 1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         assertTrue(file.exists());
     }
 
